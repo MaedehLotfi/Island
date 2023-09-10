@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Island.Models.PlaceReport>
+
+@{
+    ViewBag.Title = "PlaceReviewsReportList";
+    Layout = "~/Views/Shared/_admin.cshtml";
+}
+
+<div id="Container">
+    <h2>PlaceReport' List</h2>
+    <hr />
+    <p>
+        @Html.ActionLink("Create New PlaceReport for checking", "PlaceReviewReport")
+    </p>
+    
+    <br />
+
+    <table class="table table-bordered table-responsive">
+        <tr class="table-primary">
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlaceReviewId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.message)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlaceReviewId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    <button class="btn btn-outline-danger deletebtn" myid="@item.id">Delete Report</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".deletebtn").click(function () {
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                var idtd = $(this).attr("myid");
+                var tr = $(this).parent().parent();
+
+                $.ajax({
+                    url: "@Url.Action("DeletePlaceReportByAjax")",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {id: idtd},
+                    success: function (response) {
+                        alert(response.msg)
+                        $(tr).remove();
+                    },
+                    error: function (response) {
+                        alert("Place review's report did not delete");
+                    }
+                });
+
+            }
+            });
+    });
+</script>
+<style>
+    h2 {
+        padding: 10px;
+        color: black
+    }
+
+    #Container {
+        padding: 15px;
+    }
+</style>

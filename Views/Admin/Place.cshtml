@@ -1,0 +1,220 @@
+﻿@model Island.Models.Place
+
+@{
+    ViewBag.Title = "Place";
+    Layout = "~/Views/Shared/_admin.cshtml";
+}
+
+@*mapbox*@
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+
+
+<div id="Container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <h2>Place</h2>
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.id)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <h5 style="color: red; padding: 10px;">Choose the pin on map and it will automatically fill the fields below</h5>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.latG, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.latG, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.latG, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.longG, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.longG, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.longG, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*div for map*@
+
+            <div id="map2" style="margin-left: 7%; width: 70%; height: 400px; background-color: whitesmoke;"></div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TellNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TellNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TellNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.OpennigHour, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.OpennigHour, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.OpennigHour, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MoreInfo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.MoreInfo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MoreInfo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Instagram, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Instagram, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Instagram, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Website, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @*for category id use the dropdownlist to show the text for each value*@ 
+                    @Html.DropDownListFor(model => model.CategoryId,
+                  new List<SelectListItem> {
+                       new SelectListItem { Value = "1" , Text = "1 - Food & Drink" },
+                       new SelectListItem { Value = "2" , Text = "2 - Shopping" },
+                       new SelectListItem { Value = "3" , Text = "3 - Services" },
+                       new SelectListItem { Value = "4" , Text = "4 - Education" },
+                       new SelectListItem { Value = "5" , Text = "5 - Public Institutions" },
+                       new SelectListItem { Value = "6" , Text = "6 - Attractions" },
+                       new SelectListItem { Value = "7" , Text = "7 - Emergency" },
+                       new SelectListItem { Value = "8" , Text = "8 - Organizations" },
+                       new SelectListItem { Value = "9" , Text = "9 - Health & Medical" },
+                       new SelectListItem { Value = "10" , Text = "10 - Travel & Transportation" },
+                       new SelectListItem { Value = "11" , Text = "11 - Entertainment" },
+
+                    },
+                  new { @class = "form-control" })
+
+
+                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div style="padding:10px; margin:20px">
+        @Html.ActionLink("Back to Places List", "PlacesList")
+    </div>
+</div>
+
+
+
+<!-- Load the `mapbox-gl-geocoder` plugin. -->
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+@*codes for mapbox*@
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWFlZGVsb3RmaTk2IiwiYSI6ImNsa3MwcHA5dzBma3czZWxqcWQyd2JhZjMifQ.dIbRedlhwESgk0NTe_bVKw';
+    const map = new mapboxgl.Map({
+        container: 'map2',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [53.6880, 32.4279], 
+        zoom: 4
+    });
+
+    map.on('click', (e) => {
+
+        marker1.setLngLat(e.lngLat);
+        $('#latG').val(e.lngLat.lat);
+        $('#longG').val(e.lngLat.lng);
+
+
+    });
+
+
+    var p1 = new mapboxgl.Popup({ offset: 25 }).setText("Your selected place");
+    // Create a default Marker and add it to the map.
+    const marker1 = new mapboxgl.Marker({
+        draggable: true
+    })
+        .setLngLat([12.554729, 55.70651]).setPopup(p1)
+        .addTo(map);
+
+
+    map.addControl(
+        new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl
+        })
+    );
+
+
+    marker1.on('draged', () => {
+        const lngLat = marker1.getLngLat();
+        $('#latG').val(e.lngLat.lat + " Lat");
+        $('#longG').val(e.lngLat.lng + " Lng");
+    })
+
+</script>
+<style>
+    h2 {
+        padding: 10px;
+        color: black
+    }
+
+    #Container {
+        padding: 1px;
+    }
+</style>

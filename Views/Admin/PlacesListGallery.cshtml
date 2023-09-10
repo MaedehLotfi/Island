@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Island.Models.PlaceGallery>
+
+@{
+    ViewBag.Title = "PlacesListGallery";
+    Layout = "~/Views/Shared/_admin.cshtml";
+}
+
+
+<div id="Container">
+    <h2>Places' Gallery List</h2>
+    <hr />
+    <p>
+        @Html.ActionLink("Upload New Images", "PlaceGallery")
+    </p>
+    @using (Html.BeginForm())
+    {
+        <div>
+            <input type="text" name="searchPlaceId" id="searchPlaceId" placeholder="Search image uploaded for Place Id" style="width:300px">
+
+            <input type="text" name="searchUserId" id="searchUserId" placeholder="Search image uploaded by User Id" style="width:300px">
+
+            <input type="submit" class="btn-outline-primary" value="Search">
+        </div>
+    }
+    <br />
+
+    <table class="table table-bordered table-responsive">
+        <tr class="table-primary">
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.filePath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlaceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    <img src="~/uploadPlaceimg/@item.filePath" height="100" width="100" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlaceId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit Image", "PlaceGallery", new { id = item.id }, new { @class = "btn btn-outline-success" })
+                    <button class="btn btn-outline-danger deletebtn" myid="@item.id">Delete Place's Image</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".deletebtn").click(function () {
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                var idtd = $(this).attr("myid");
+                var tr = $(this).parent().parent();
+
+                $.ajax({
+                    url: "@Url.Action("DeletePlaceImageByAjax")",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {id: idtd},
+                    success: function (response) {
+                        alert(response.msg)
+                        $(tr).remove();
+                    },
+                    error: function (response) {
+                        alert('Image did not delete');
+                    }
+                });
+
+            }
+            });
+    });
+</script>
+<style>
+    h2 {
+        padding: 10px;
+        color: black
+    }
+
+    #Container {
+        padding: 15px;
+    }
+</style>

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Island.Models.Category>
+
+@{
+    ViewBag.Title = "CategoriesList";
+    Layout = "~/Views/Shared/_admin.cshtml";
+}
+
+
+<div id="Container">
+    <h2>Categories' List</h2>
+    <hr />
+    <p>
+        @Html.ActionLink("Create New Category", "Category")
+    </p>
+
+    <br />
+
+    <table class="table table-bordered table-responsive">
+        <tr class="table-primary">
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit Category", "Category", new { id = item.id }, new { @class = "btn btn-outline-success" })
+
+                    <button class="btn btn-outline-danger deletebtn" myid="@item.id">Delete Category</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".deletebtn").click(function () {
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                var idtd = $(this).attr("myid");
+                var tr = $(this).parent().parent();
+
+                $.ajax({
+                    url: "@Url.Action("DeleteCategoryByAjax")",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {id: idtd},
+                    success: function (response) {
+                        alert(response.msg)
+                        $(tr).remove();
+                    },
+                    error: function (response) {
+                        alert("Category did not delete");
+                    }
+                });
+
+            }
+            });
+    });
+</script>
+<style>
+    h2 {
+        padding: 10px;
+        color: black
+    }
+
+    #Container {
+        padding: 15px;
+    }
+</style>

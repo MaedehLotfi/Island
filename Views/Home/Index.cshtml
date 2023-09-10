@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<main>
+    <section class="row" aria-labelledby="aspnetTitle">
+        <h1 id="title">Island</h1>
+        <p class="lead">Island is an app for Iranians all over the world to connect with each other.</p>
+        @*<p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>*@
+    </section>
+
+    <div class="row">
+        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
+            <h2 id="gettingStartedTitle">Admin Page</h2>
+            <p>
+                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+                enables a clean separation of concerns and gives you full control over markup
+                for enjoyable, agile development.
+            </p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("Index","Admin")">Admin Page &raquo;</a></p>
+        </section>
+        
+        
+    </div>
+</main>

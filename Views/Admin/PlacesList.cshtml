@@ -1,0 +1,160 @@
+﻿@model IEnumerable<Island.Models.Place>
+
+@{
+    ViewBag.Title = "PlacesList";
+    Layout = "~/Views/Shared/_admin.cshtml";
+}
+
+
+<div id="Container">
+    <h2>Places List</h2>
+    <hr />
+    <p>
+        @Html.ActionLink("Create New Place", "Place")
+    </p>
+    @using (Html.BeginForm())
+    {
+        <div>
+            <input type="text" name="searchValue" id="searchValue" placeholder="Search place with Place Name" style="width:300px">
+            <input type="text" name="searchPlaceId" id="searchPlaceId" placeholder="Search place with Place Id" style="width:300px">
+            <input type="text" name="searchUserId" id="searchUserId" placeholder="Search place created by User Id" style="width:300px">
+            <input type="text" name="searchCategoryId" id="searchCategoryId" placeholder="Search place by Category Id" style="width:300px">
+
+            <input type="submit" class="btn-outline-primary" value="Search">
+        </div>
+    }
+    <br />
+
+    <table class="table table-bordered table-responsive">
+        <tr class="table-primary">
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.latG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.longG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TellNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpennigHour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoreInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Instagram)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Website)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.latG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.longG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TellNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpennigHour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MoreInfo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Instagram)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Website)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit Place", "Place", new { id = item.id }, new { @class = "btn btn-outline-success" })
+                    <button class="btn btn-outline-danger deletebtn" myid="@item.id">Delete Place</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".deletebtn").click(function () {
+            var result = confirm("Are you sure?");
+            if (result == true) {
+                var idtd = $(this).attr("myid");
+                var tr = $(this).parent().parent();
+
+                $.ajax({
+                    url: "@Url.Action("DeletePlaceByAjax")",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {id: idtd},
+                    success: function (response) {
+                        alert(response.msg)
+                        $(tr).remove();
+                    },
+                    error: function (response) {
+                        alert('Place did not delete');
+                    }
+                });
+
+            }
+            });
+    });
+</script>
+<style>
+    h2 {
+        padding: 10px;
+        color: black
+    }
+
+    #Container {
+        padding: 15px;
+    }
+</style>
