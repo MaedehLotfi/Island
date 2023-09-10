@@ -12,7 +12,7 @@ namespace Island.Controllers
     public class UserController : ApiController
     {
         ApplicationDbContext mydb = new ApplicationDbContext();
-
+        //apis
         //all services
 
         List<Models.Service> ServicesList = new List<Models.Service>();
